@@ -3,7 +3,7 @@ package com.example.app.model;
 import java.util.List;
 import java.util.Scanner;
 
-// This GIT shit works, woohooooo!
+// This GIT stuff works, woohooooo!
 public class MainApp {
 
     public static void main(String[] args) {
