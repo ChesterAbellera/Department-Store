@@ -16,23 +16,175 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RegionTableGateway {
-    
+
     private Connection mConnection;
-    
+
     private static final String TABLE_NAME = "region";
     private static final String COLUMN_REGIONNUMBER = "regionnumber";
-    private static final String COLUMN_SHOPMANAGERNAME = "regionname";
+    private static final String COLUMN_REGIONNAME = "regionname";
     private static final String COLUMN_ADDRESS = "address";
     private static final String COLUMN_PHONENUMBER = "phonenumber";
     private static final String COLUMN_EMAIL = "email";
-    
 
     public RegionTableGateway(Connection connection) {
         mConnection = connection;
+    }
+
+    public int insertRegion(int r, String rn, String a, String p, String e) throws SQLException {
+
+        String query;
+        PreparedStatement stmt;
+        int numRowsAffected;
+        int id = -1;
+
+        query = "INSERT INTO " + TABLE_NAME + " ("
+                + COLUMN_REGIONNAME + ", "
+                + COLUMN_ADDRESS + ", "
+                + COLUMN_PHONENUMBER + ", "
+                + COLUMN_EMAIL
+                + ") VALUES (?, ?, ?, ?)";
+
+        stmt = mConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        stmt.setString(1, rn);
+        stmt.setString(2, a);
+        stmt.setString(3, p);
+        stmt.setString(4, e);
+
+        if (r == -1) {
+            stmt.setNull(6, java.sql.Types.INTEGER);
+        } else {
+            stmt.setInt(6, r);
+        }
+        
+        numRowsAffected = stmt.executeUpdate();
+        
+        if (numRowsAffected == 1)
+        {
+            // If one row was inserted, retrieve the id assigned to that row
+            ResultSet keys = stmt.getGeneratedKeys();
+            keys.next();
+            
+            id = keys.getInt(1);
+        }
+        // Return the ID assigned to the row in the database
+        return id;
     }
     
     
     
     
     
+    
+    
+    
+    
+    // Code for DELETING A REGION
+    public boolean deleteRegion(int id) throws SQLException
+    {
+        String query;
+        PreparedStatement stmt;
+        int numRowsAffected;
+        
+        // The required SQL DELETE statement with place holders for the id of the row to be removed
+        query =" DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_REGIONNUMBER + " = ? ";
+    
+        // Create a PreparedStatement object to execute the query and insert the id into the query
+        stmt = mConnection.prepareStatement(query);
+        stmt.setInt(1, id);
+
+        // Execute the query
+        numRowsAffected = stmt.executeUpdate();
+
+        // Return true if one and only one row was deleted from the database
+        return(numRowsAffected == 1);          
+    }
+    
+    
+    
+    
+    public List<Region> getRegions() throws SQLException
+    {
+        String query;
+        Statement stmt;
+        ResultSet rs;
+        List<Region> regions;
+        
+        int regionnumber;
+        String regionname, address, phonenumber, email;
+        
+        Region r;
+        
+        query = "SELECT * FROM " + TABLE_NAME;
+        stmt = this.mConnection.createStatement();
+        rs = stmt.executeQuery(query);
+        // Iterates through the result set, extracting the data from each row
+        // and storing it in a Region object, which is inserted into an initially
+        // empty ArrayList
+        
+        regions = new ArrayList<Region>();
+        while(rs.next())
+        {
+            regionnumber = rs.getInt(COLUMN_REGIONNUMBER);
+            regionname = rs.getString(COLUMN_REGIONNAME);
+            address = rs.getString(COLUMN_ADDRESS);
+            phonenumber = rs.getString(COLUMN_PHONENUMBER);
+            email = rs.getString(COLUMN_EMAIL);
+            
+            
+            r = new Region(regionnumber, regionname, address, phonenumber, email);
+            regions.add(r);
+        }
+        
+        //Returns the list of Shop objects retrieved
+        return regions;
+    }
+    
+    
+    boolean updateRegion(Region r) throws SQLException 
+    {
+        String query;                   // The SQL Query to execute
+        PreparedStatement stmt;         // The Java.sql. PreparedStatement object used to create the SQL Query
+        int numRowsAffected;
+        int r;
+        
+        // The required SQL INSERT statement qith place holders for the values to be inserted
+        query = "UPDATE " + TABLE_NAME + " SET " +
+                COLUMN_REGIONNUMBER        + " = ?, " +
+                COLUMN_REGIONNAME  + " = ?, " +
+                COLUMN_ADDRESS      + " = ?, " +
+                COLUMN_PHONENUMBER       + " = ?, " +
+                COLUMN_EMAIL              + " = ?, " +
+                " WHERE " + COLUMN_REGIONNUMBER + " = ?";
+        
+        // Create a PreparedStatement object to execute the query and insert the new value into the query
+        stmt = mConnection.prepareStatement(query);
+        stmt.setString(1, r.getRegionnumber());
+        stmt.setString(2, r.getRegionname());
+        stmt.setString(3, r.getAddress());
+        stmt.setString(4, r.getPhonenumber());
+        stmt.setString(5, r.getEmail());
+        r = r.getRegionnumber();
+        
+        if (r == -1) {
+            stmt.setNull(1, java.sql.Types.INTEGER);
+        }
+        else {
+            stmt.setInt(6, r);
+        }
+        stmt.setInt(1, r.getRegionnumber());
+        
+        // Execute the query and make sure that one and only one row was inserted into the database
+        numRowsAffected = stmt.executeUpdate();
+        
+        // Return true if one and only row was updated in the database
+        return(numRowsAffected == 1);
+    }
+
+
+
+
+
+
+
+
 }
