@@ -23,12 +23,12 @@ public class MainApp {
             System.out.println("1. Create a new Shop");
             System.out.println("2. Delete an existing Shop");
             System.out.println("3. Edit existing Shop(s)");
-            System.out.println("4. View all Shops");
+            System.out.println("4. View all existing Shops");
             System.out.println();
-            System.out.println("5. Create a new Shop");
-            System.out.println("6. Delete an existing Shop");
-            System.out.println("7. Edit existing Shop(s)");
-            System.out.println("8. View all Shops");
+            System.out.println("5. Create a new Region");
+            System.out.println("6. Delete an existing Region");
+            System.out.println("7. Edit existing Region(s)");
+            System.out.println("8. View all existing Regions");
             System.out.println();
             System.out.println("9. Exit");
             System.out.println();
@@ -250,9 +250,17 @@ public class MainApp {
 
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
     private static void createRegion(Scanner keyb, Model mdl) {
-        Region s = readRegion(keyb);
-        if (mdl.addRegion(s)) {
+        Region r = readRegion(keyb);
+        if (mdl.addRegion(r)) {
             System.out.println("Region was successfully added!");
             System.out.println();
         } else {
@@ -264,12 +272,12 @@ public class MainApp {
 
     private static void deleteRegion(Scanner keyboard, Model model) {
         System.out.println("Enter the ID of the Region that you wish to delete :");
-        int regionID = Integer.parseInt(keyboard.nextLine());
-        Region s;
+        int regionnumber = Integer.parseInt(keyboard.nextLine());
+        Region r;
 
-        s = model.findRegionByRegionId(regionID);
-        if (s != null) {
-            if (model.removeRegion(s)) {
+        r = model.findRegionByRegionId(regionnumber);
+        if (r != null) {
+            if (model.removeRegion(r)) {
                 System.out.println("Region Deleted");
                 System.out.println();
             } else {
@@ -284,13 +292,13 @@ public class MainApp {
 
     private static void editRegion(Scanner kb, Model m) {
         System.out.println("Enter the ID of the Region that you wish to edit :");
-        int regionID = Integer.parseInt(kb.nextLine());
-        Region s;
+        int regionnumber = Integer.parseInt(kb.nextLine());
+        Region r;
 
-        s = m.findRegionByRegionnumber(regionnumber);
-        if (s != null) {
-            editRegionDetails(kb, s);
-            if (m.updateRegion(s)) {
+        r = m.findRegionByRegionnumber(regionnumber);
+        if (r != null) {
+            editRegionDetails(kb, r);
+            if (m.updateRegion(r)) {
                 System.out.println("Region updated");
                 System.out.println();
             } else {
@@ -331,7 +339,7 @@ public class MainApp {
 
     private static Region readRegion(Scanner keyb) {
         String address, regionmanagername, phonenumber, dateopened, url;
-        int regionID, regionnumber;
+        int regionnumber;
         String line;
 
         address = getString(keyb, "Enter Region Address : ");
@@ -356,7 +364,7 @@ public class MainApp {
 
     private static void editRegionDetails(Scanner keyb, Region s) {
         String address, regionmanagername, phonenumber,  url, dateopened;
-        int regionID, regionnumber;
+        int regionnumber;
         String line1, line2;
 
         address = getString(keyb, "Enter Region Address [" + s.getAddress() + "]: ");

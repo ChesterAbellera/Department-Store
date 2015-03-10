@@ -22,6 +22,7 @@ public class RegionTableGateway {
     private static final String TABLE_NAME = "region";
     private static final String COLUMN_REGIONNUMBER = "regionnumber";
     private static final String COLUMN_REGIONNAME = "regionname";
+    private static final String COLUMN_REGIONALMANAGER = "regionalmanager";
     private static final String COLUMN_ADDRESS = "address";
     private static final String COLUMN_PHONENUMBER = "phonenumber";
     private static final String COLUMN_EMAIL = "email";
@@ -30,7 +31,7 @@ public class RegionTableGateway {
         mConnection = connection;
     }
 
-    public int insertRegion(int r, String rn, String a, String p, String e) throws SQLException {
+    public int insertRegion(int r, String rn, String rm, String a, String p, String e) throws SQLException {
 
         String query;
         PreparedStatement stmt;
@@ -39,21 +40,24 @@ public class RegionTableGateway {
 
         query = "INSERT INTO " + TABLE_NAME + " ("
                 + COLUMN_REGIONNAME + ", "
+                + COLUMN_REGIONALMANAGER + ", "
                 + COLUMN_ADDRESS + ", "
                 + COLUMN_PHONENUMBER + ", "
                 + COLUMN_EMAIL
-                + ") VALUES (?, ?, ?, ?)";
+                + ") VALUES (?, ?, ?, ?, ?)";
 
         stmt = mConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        stmt.setString(1, rn);
-        stmt.setString(2, a);
-        stmt.setString(3, p);
-        stmt.setString(4, e);
+        stmt.setString(1, r);
+        stmt.setString(2,rn);
+        stmt.setString(3, rm);
+        stmt.setString(4, a);
+        stmt.setString(5, p);
+        stmt.setString(6, e);
 
         if (r == -1) {
-            stmt.setNull(6, java.sql.Types.INTEGER);
+            stmt.setNull(1, java.sql.Types.INTEGER);
         } else {
-            stmt.setInt(6, r);
+            stmt.setInt(1, r);
         }
         
         numRowsAffected = stmt.executeUpdate();
@@ -110,7 +114,7 @@ public class RegionTableGateway {
         List<Region> regions;
         
         int regionnumber;
-        String regionname, address, phonenumber, email;
+        String regionname, regionalmanager, address, phonenumber, email;
         
         Region r;
         
@@ -126,12 +130,13 @@ public class RegionTableGateway {
         {
             regionnumber = rs.getInt(COLUMN_REGIONNUMBER);
             regionname = rs.getString(COLUMN_REGIONNAME);
+            regionalmanager = rs.getString(COLUMN_REGIONALMANAGER);
             address = rs.getString(COLUMN_ADDRESS);
             phonenumber = rs.getString(COLUMN_PHONENUMBER);
             email = rs.getString(COLUMN_EMAIL);
             
             
-            r = new Region(regionnumber, regionname, address, phonenumber, email);
+            r = new Region(regionnumber, regionname, regionalmanager, address, phonenumber, email);
             regions.add(r);
         }
         
@@ -150,7 +155,7 @@ public class RegionTableGateway {
         // The required SQL INSERT statement qith place holders for the values to be inserted
         query = "UPDATE " + TABLE_NAME + " SET " +
                 COLUMN_REGIONNUMBER        + " = ?, " +
-                COLUMN_REGIONNAME  + " = ?, " +
+                COLUMN_REGIONALMANAGER  + " = ?, " +
                 COLUMN_ADDRESS      + " = ?, " +
                 COLUMN_PHONENUMBER       + " = ?, " +
                 COLUMN_EMAIL              + " = ?, " +
@@ -159,7 +164,7 @@ public class RegionTableGateway {
         // Create a PreparedStatement object to execute the query and insert the new value into the query
         stmt = mConnection.prepareStatement(query);
         stmt.setString(1, r.getRegionnumber());
-        stmt.setString(2, r.getRegionname());
+        stmt.setString(2, r.getRegionalmanager());
         stmt.setString(3, r.getAddress());
         stmt.setString(4, r.getPhonenumber());
         stmt.setString(5, r.getEmail());

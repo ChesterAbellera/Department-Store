@@ -42,7 +42,7 @@ public class Model {
     
     
     
-    // ODE TO CREATE A SHOP
+    // CODE TO CREATE A SHOP
     public boolean addShop(Shop s)
     {
         boolean result = false;
@@ -124,7 +124,7 @@ public class Model {
         
         try 
         {
-            // Removes the Shop in the database
+            // Updates the Shop in the database
             updated = this.gateway.updateShop(s);
         } 
         catch (SQLException ex)
@@ -132,5 +132,48 @@ public class Model {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE,null,ex);
         }
         return updated;
-    } 
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    List<Region> regions;
+    //RegionTableGateway gateway;
+
+
+
+
+    // CODE TO CREATE A REGION
+    public boolean addregion(Region r)
+    {
+        boolean result = false;
+        try {
+            int id = this.gateway.insertRegion(r.getRegionname(), r.getRegionalmanager(), r.getAddress(), r.getPhonenumber(), r.getEmail());
+            
+            if (id != -1)
+            {
+                r.setRegionnumber(id);
+                this.regions.add(r);
+                result = true;
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
+
+
+
+
+
+
+
+
 }

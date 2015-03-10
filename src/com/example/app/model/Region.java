@@ -4,19 +4,20 @@ public class Region {
     
     private int regionnumber;
     private String regionname;
+    private String regionalmanager;
     private String address;
     private String phonenumber;
     private String email;
     
 
-    public Region(int r, String rn, String a, String p, String e) 
+    public Region(int r, String rn, String rm, String a, String p, String e) 
     {
         this.regionnumber = r;
     }
 
-    public Region(String rn, String a, String p, String e)
+    public Region(String rn, String rm, String a, String p, String e)
     {
-        this(-1, rn, a, p, e);
+        this(-1, rn, rm, a, p, e);
     }
             
             
@@ -31,12 +32,20 @@ public class Region {
         this.regionnumber = regionnumber;
     }
     /* ------------------------------- */
-    public String getRegionname() {
+     public String getRegionname() {
         return regionname;
     }
 
     public void setRegionname(String regionname) {
         this.regionname = regionname;
+    }
+    /* ------------------------------- */
+    public String getRegionalmanager() {
+        return regionalmanager;
+    }
+
+    public void setRegionalmanager(String regionalmanager) {
+        this.regionalmanager = regionalmanager;
     }
     /* ------------------------------- */
      public String getAddress() {
