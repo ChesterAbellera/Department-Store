@@ -68,7 +68,6 @@ public class ShopTableGateway {
         stmt.setString(5, u);
         //stmt.setInt(6, sid);
         stmt.setInt(6, r);
-        
         if (r == -1) {
             stmt.setNull(6, java.sql.Types.INTEGER);
         }
@@ -161,6 +160,9 @@ public class ShopTableGateway {
             url = rs.getString(COLUMN_URL);
             shopID = rs.getInt(COLUMN_SHOPID);
             regionnumber = rs.getInt(COLUMN_REGIONNUMBER);
+            if (rs.wasNull()) {
+                regionnumber = -1;
+            }
             
             s = new Shop(address, shopmanagername, phonenumber, dateopened, url, shopID, regionnumber);
             shops.add(s);

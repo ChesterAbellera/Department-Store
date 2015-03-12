@@ -11,169 +11,183 @@ public class Model {
 
     private static Model instance = null;
 
-    public static synchronized Model getInstance() 
-        {
-            if (instance == null) {
-                instance = new Model();
+    public static synchronized Model getInstance() {
+        if (instance == null) {
+            instance = new Model();
         }
         return instance;
     }
 
     List<Shop> shops;
-    ShopTableGateway gateway;
+    ShopTableGateway shopGateway;
+
+    List<Region> regions;
+    RegionTableGateway regionGateway;
 
     private Model() {
 
-       try {
+        try {
             Connection conn = DBConnection.getInstance();
-            this.gateway = new ShopTableGateway(conn);
-            
-            this.shops = this.gateway.getShops();
-        } 
-        catch (ClassNotFoundException ex) {
+            this.shopGateway = new ShopTableGateway(conn);
+            this.regionGateway = new RegionTableGateway(conn);
+
+            this.shops = this.shopGateway.getShops();
+            this.regions = this.regionGateway.getRegions();
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-    
-    
-    
-    
+
+    //==========================================================================
+    // SHOP SECTION
+    //==========================================================================
     // CODE TO CREATE A SHOP
-    public boolean addShop(Shop s)
-    {
+    //--------------------------------------------------------------------------
+    public boolean addShop(Shop s) {
         boolean result = false;
         try {
-            int id = this.gateway.insertShop(s.getAddress(), s.getDateopened(), s.getPhonenumber(), s.getShopmanagername(), s.getUrl(), s.getRegionnumber());
-            
-            if (id != -1)
-            {
+            int id = this.shopGateway.insertShop(s.getAddress(), s.getDateopened(), s.getPhonenumber(), s.getShopmanagername(), s.getUrl(), s.getRegionnumber());
+
+            if (id != -1) {
                 s.setShopID(id);
                 this.shops.add(s);
                 result = true;
             }
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
     }
-    
-    
-    
-    
-    // CODE TO DELETE A SHOP
-    public boolean removeShop(Shop s){
-      boolean removed = false;
-      
-     try {
-         // Removes the Shop in the database
-         removed = this.gateway.deleteShop(s.getShopID());
-         if(removed){
-             removed=this.shops.remove(s);
-           }
-         } 
-         catch (SQLException ex){
-             Logger.getLogger(Model.class.getName()).log(Level.SEVERE,null,ex);
-       }
-      return removed;
-    }
-    
-    
-    
-    
+
+    //--------------------------------------------------------------------------
     // CODE TO FIND A SHOP BY SHOPID
+    //--------------------------------------------------------------------------
     public List<Shop> getShops() {
         return this.shops;
     }
 
-    Shop findShopByShopId(int shopID) 
-    {
-       Shop s = null;
-       int i = 0;
-       boolean found = false;
-       while (i < this.shops.size() && !found)
-       {
-           s = this.shops.get(i);
-           if (s.getShopID() == shopID)
-           {
-               found = true;
-           }
-           else 
-           {
-               i++;
-           }
+    Shop findShopByShopId(int shopID) {
+        Shop s = null;
+        int i = 0;
+        boolean found = false;
+        while (i < this.shops.size() && !found) {
+            s = this.shops.get(i);
+            if (s.getShopID() == shopID) {
+                found = true;
+            } else {
+                i++;
+            }
         }
-       if (!found)
-       {
-           s = null;
-       }
-       return s;
+        if (!found) {
+            s = null;
+        }
+        return s;
     }
-    
-    
-    
-    
+
+    //--------------------------------------------------------------------------
+    // CODE TO DELETE A SHOP
+    //--------------------------------------------------------------------------
+    public boolean removeShop(Shop s) {
+        boolean removed = false;
+
+        try {
+            // Removes the Shop in the database
+            removed = this.shopGateway.deleteShop(s.getShopID());
+            if (removed) {
+                removed = this.shops.remove(s);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return removed;
+    }
+
+    //--------------------------------------------------------------------------
     // CODE TO UPDATE A SHOP
-    boolean updateShop(Shop s) 
-    {
+    //--------------------------------------------------------------------------
+    boolean updateShop(Shop s) {
         boolean updated = false;
-        
-        try 
-        {
+
+        try {
             // Updates the Shop in the database
-            updated = this.gateway.updateShop(s);
-        } 
-        catch (SQLException ex)
-        {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE,null,ex);
+            updated = this.shopGateway.updateShop(s);
+        } catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
         return updated;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    List<Region> regions;
-    //RegionTableGateway gateway;
 
-
-
-
+    /* REGIONS SECTION !!! */
     // CODE TO CREATE A REGION
-    public boolean addregion(Region r)
-    {
+    public boolean addRegion(Region r) {
         boolean result = false;
         try {
-            int id = this.gateway.insertRegion(r.getRegionname(), r.getRegionalmanager(), r.getAddress(), r.getPhonenumber(), r.getEmail());
-            
-            if (id != -1)
-            {
+            int id = this.regionGateway.insertRegion(r.getRegionname(), r.getRegionalmanager(), r.getAddress(), r.getPhonenumber(), r.getEmail());
+
+            if (id != -1) {
                 r.setRegionnumber(id);
                 this.regions.add(r);
                 result = true;
             }
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
     }
 
+    // CODE TO FIND A REGION BY REGIONNUMBER
+    public List<Region> getRegions() {
+        return this.regions;
+    }
 
+    Region findRegionByRegionNumber(int regionnumber) {
+        Region r = null;
+        int i = 0;
+        boolean found = false;
+        while (i < this.regions.size() && !found) {
+            r = this.regions.get(i);
+            if (r.getRegionnumber() == regionnumber) {
+                found = true;
+            } else {
+                i++;
+            }
+        }
+        if (!found) {
+            r = null;
+        }
+        return r;
+    }
 
+    // CODE TO DELETE A SHOP
+    public boolean removeRegion(Region r) {
+        boolean removed = false;
 
+        try {
+            // Removes the Shop in the database
+            removed = this.regionGateway.deleteRegion(r.getRegionnumber());
+            if (removed) {
+                removed = this.regions.remove(r);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return removed;
+    }
 
+    // CODE TO UPDATE A SHOP
+    boolean updateRegion(Region r) {
+        boolean updated = false;
 
-
-
+        try {
+            // Updates the Shop in the database
+            updated = this.regionGateway.updateRegion(r);
+        } catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return updated;
+    }
 
 }

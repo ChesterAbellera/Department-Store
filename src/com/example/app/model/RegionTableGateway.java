@@ -31,7 +31,7 @@ public class RegionTableGateway {
         mConnection = connection;
     }
 
-    public int insertRegion(int r, String rn, String rm, String a, String p, String e) throws SQLException {
+    public int insertRegion(String rn, String rm, String a, String p, String e) throws SQLException {
 
         String query;
         PreparedStatement stmt;
@@ -47,18 +47,12 @@ public class RegionTableGateway {
                 + ") VALUES (?, ?, ?, ?, ?)";
 
         stmt = mConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        stmt.setString(1, r);
+        /*stmt.setString(1, r);*/
         stmt.setString(2,rn);
         stmt.setString(3, rm);
         stmt.setString(4, a);
         stmt.setString(5, p);
         stmt.setString(6, e);
-
-        if (r == -1) {
-            stmt.setNull(1, java.sql.Types.INTEGER);
-        } else {
-            stmt.setInt(1, r);
-        }
         
         numRowsAffected = stmt.executeUpdate();
         
@@ -150,11 +144,11 @@ public class RegionTableGateway {
         String query;                   // The SQL Query to execute
         PreparedStatement stmt;         // The Java.sql. PreparedStatement object used to create the SQL Query
         int numRowsAffected;
-        int r;
+        //int re;
         
         // The required SQL INSERT statement qith place holders for the values to be inserted
         query = "UPDATE " + TABLE_NAME + " SET " +
-                COLUMN_REGIONNUMBER        + " = ?, " +
+                COLUMN_REGIONNAME           + " = ?, " +
                 COLUMN_REGIONALMANAGER  + " = ?, " +
                 COLUMN_ADDRESS      + " = ?, " +
                 COLUMN_PHONENUMBER       + " = ?, " +
@@ -163,21 +157,13 @@ public class RegionTableGateway {
         
         // Create a PreparedStatement object to execute the query and insert the new value into the query
         stmt = mConnection.prepareStatement(query);
-        stmt.setString(1, r.getRegionnumber());
-        stmt.setString(2, r.getRegionalmanager());
-        stmt.setString(3, r.getAddress());
-        stmt.setString(4, r.getPhonenumber());
-        stmt.setString(5, r.getEmail());
-        r = r.getRegionnumber();
-        
-        if (r == -1) {
-            stmt.setNull(1, java.sql.Types.INTEGER);
-        }
-        else {
-            stmt.setInt(6, r);
-        }
         stmt.setInt(1, r.getRegionnumber());
-        
+        stmt.setString(2, r.getRegionname());
+        stmt.setString(3, r.getRegionalmanager());
+        stmt.setString(4, r.getAddress());
+        stmt.setString(5, r.getPhonenumber());
+        stmt.setString(6, r.getEmail());
+                
         // Execute the query and make sure that one and only one row was inserted into the database
         numRowsAffected = stmt.executeUpdate();
         
