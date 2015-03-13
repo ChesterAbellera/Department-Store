@@ -172,11 +172,11 @@ public class MainApp {
         if (shops.isEmpty()) {
             System.out.println("Sorry, there were no shops found in the database.");
         } else {
-            System.out.printf("%-50s %-25s %-15s %-20s %-17s %16s %19s\n", "Address:", "Shop Manager Name:", "Phone Number:", "Date Opened:", "Url:", "Shop ID:", "Region Number:");
+            System.out.printf("%-50s %-25s %-15s %-20s %-17s %16s %19s\n", "Shop Address:", "Shop Manager Name:", "Phone Number:", "Date Opened:", "Url:", "Shop ID:", "Region Number:");
             System.out.println();
             for (Shop sh : shops) {
                 System.out.printf("%-50s %-25s %-15s %-20s %-20s %11d %13d\n",
-                        sh.getAddress(),
+                        sh.getShopAddress(),
                         sh.getShopmanagername(),
                         sh.getPhonenumber(),
                         sh.getDateopened(),
@@ -193,11 +193,11 @@ public class MainApp {
     }
 
     private static Shop readShop(Scanner keyb) {
-        String address, shopmanagername, phonenumber, dateopened, url;
+        String shopaddress, shopmanagername, phonenumber, dateopened, url;
         int regionnumber;
         String line;
 
-        address = getString(keyb, "Enter Shop Address : ");
+        shopaddress = getString(keyb, "Enter Shop Address : ");
         shopmanagername = getString(keyb, "Enter Shop Manager Name : ");
         phonenumber = getString(keyb, "Enter Shop Phone Number : ");
         dateopened = getString(keyb, "Enter Shop Opening Date (YYYY-MM-DD) : ");
@@ -206,7 +206,7 @@ public class MainApp {
         regionnumber = Integer.parseInt(line);
 
         Shop sh = new Shop(
-                address,
+                shopaddress,
                 shopmanagername,
                 phonenumber,
                 dateopened,
@@ -218,18 +218,18 @@ public class MainApp {
     }
 
     private static void editShopDetails(Scanner keyb, Shop s) {
-        String address, shopmanagername, phonenumber,  url, dateopened;
+        String shopaddress, shopmanagername, phonenumber,  url, dateopened;
         int regionnumber;
         String line2;
 
-        address = getString(keyb, "Enter Shop Address [" + s.getAddress() + "]: ");
+        shopaddress = getString(keyb, "Enter Shop Address [" + s.getShopAddress() + "]: ");
         shopmanagername = getString(keyb, "Enter Shop Manager Name [" + s.getShopmanagername() + "]: ");
         phonenumber = getString(keyb, "Enter Shop Phone Number [" + s.getPhonenumber() + "]: ");
         url = getString(keyb, "Enter Shop URL Address [" + s.getUrl() + "]: ");
         dateopened = getString(keyb, "Enter Shop Opening Date [" + s.getDateopened() + "]: ");
         line2 = getString(keyb, "Enter Shop Region [" + s.getRegionnumber() + "]: ");
-        if (address.length() != 0) {
-            s.setAddress(address);
+        if (shopaddress.length() != 0) {
+            s.setShopAddress(shopaddress);
         }
         if (shopmanagername.length() != 0) {
             s.setShopmanagername(shopmanagername);
@@ -271,7 +271,7 @@ public class MainApp {
     }
 
     private static void deleteRegion(Scanner keyboard, Model model) {
-        System.out.println("Enter the ID of the Region that you wish to delete :");
+        System.out.println("Enter the Region Number of the Region that you wish to delete :");
         int regionnumber = Integer.parseInt(keyboard.nextLine());
         Region r;
 
@@ -291,7 +291,7 @@ public class MainApp {
     }
 
     private static void editRegion(Scanner kb, Model m) {
-        System.out.println("Enter the ID of the Region that you wish to edit :");
+        System.out.println("Enter the Region Number of the Region that you wish to edit :");
         int regionnumber = Integer.parseInt(kb.nextLine());
         Region r;
 
@@ -317,14 +317,13 @@ public class MainApp {
         if (regions.isEmpty()) {
             System.out.println("Sorry, there were no regions found in the database.");
         } else {
-            System.out.printf("%-50s %-25s %-15s %-20s %-17s %16s %19s\n", "Address:", "Region Manager Name:", "Phone Number:", "Date Opened:", "Url:", "Region ID:", "Region Number:");
+            System.out.printf("%-25s %-25s %-15s %-20s %-17s\n", "Region Number:", "Region Name:", "Region Manager Name:", "Phone Number:", "Region Email Address");
             System.out.println();
             for (Region re : regions) {
-                System.out.printf("%-50s %-25s %-15s %-20s %-20s %11d %13d\n",
+                System.out.printf("%-25d %-25s %-15s %-20s %-20s\n",
                         re.getRegionnumber(),
                         re.getRegionname(),
                         re.getRegionalmanager(),
-                        re.getAddress(),
                         re.getPhonenumber(),
                         re.getEmail()
                         );
@@ -337,18 +336,16 @@ public class MainApp {
     }
 
     private static Region readRegion(Scanner keyb) {
-        String regionname, regionalmanager, address, phonenumber, email;
+        String regionname, regionalmanager, phonenumber, email;
 
         regionname =  getString(keyb, "Enter Region Name : ");
         regionalmanager = getString(keyb, "Enter Region Manager Name : ");
-        address = getString(keyb, "Enter Region Address : ");
         phonenumber = getString(keyb, "Enter Region Phone Number : ");
         email = getString(keyb, "Enter Region Email Address : ");
 
         Region re = new Region(
                 regionname,
-                regionalmanager, 
-                address,
+                regionalmanager,
                 phonenumber,
                 email
         );
@@ -357,22 +354,18 @@ public class MainApp {
     }
 
     private static void editRegionDetails(Scanner keyb, Region r) {
-        String regionname, regionalmanager, address, phonenumber,  email;
+        String regionname, regionalmanager, phonenumber,  email;
 
         regionname = getString(keyb, "Enter Region Name [" + r.getRegionname());
         regionalmanager = getString(keyb, "Enter Region Manager Name [" + r.getRegionalmanager() + "]: ");
-        address = getString(keyb, "Enter Region Address [" + r.getAddress() + "]: ");
         phonenumber = getString(keyb, "Enter Region Phone Number [" + r.getPhonenumber() + "]: ");
-        email = getString(keyb, "Enter Region URL Address [" + r.getEmail() + "]: ");
+        email = getString(keyb, "Enter Region Email Address [" + r.getEmail() + "]: ");
         
         if (regionname.length() != 0) {
             r.setRegionname(regionname);
         }
         if (regionalmanager.length() != 0) {
             r.setRegionalmanager(regionalmanager);
-        }
-        if (address.length() != 0) {
-            r.setAddress(address);
         }
         if (phonenumber.length() != 0) {
             r.setPhonenumber(phonenumber);

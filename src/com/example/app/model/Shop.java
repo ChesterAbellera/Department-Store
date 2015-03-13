@@ -2,7 +2,7 @@ package com.example.app.model;
 
 public class Shop {
 
-    private String address;
+    private String shopaddress;
     private String shopmanagername;
     private String phonenumber;
     private String url;
@@ -10,9 +10,9 @@ public class Shop {
     private int shopID;
     private int regionnumber;
 
-    public Shop(String a, String sm, String p, String d, String u, int sid, int r) 
+    public Shop(String sa, String sm, String p, String d, String u, int sid, int r) 
     {
-        this.address = a;
+        this.shopaddress = sa;
         this.shopmanagername = sm;
         this.phonenumber = p;
         this.url = u;
@@ -21,21 +21,21 @@ public class Shop {
         this.regionnumber = r;
     }
 
-    public Shop(String a, String sm, String p, String d, String u, int r)
+    public Shop(String sa, String sm, String p, String d, String u, int r)
     {
-        this(a, sm, p, d, u, -1 , r);
+        this(sa, sm, p, d, u, -1 , r);
     }
             
             
             
     /* Get/Set Methods */
     /* ------------------------------- */
-    public String getAddress() {
-        return address;
+    public String getShopAddress() {
+        return shopaddress;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setShopAddress(String shopaddress) {
+        this.shopaddress = shopaddress;
     }
     /* ------------------------------- */
     public String getShopmanagername() {

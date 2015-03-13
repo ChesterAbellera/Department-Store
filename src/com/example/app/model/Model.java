@@ -49,7 +49,7 @@ public class Model {
     public boolean addShop(Shop s) {
         boolean result = false;
         try {
-            int id = this.shopGateway.insertShop(s.getAddress(), s.getDateopened(), s.getPhonenumber(), s.getShopmanagername(), s.getUrl(), s.getRegionnumber());
+            int id = this.shopGateway.insertShop(s.getShopAddress(), s.getDateopened(), s.getPhonenumber(), s.getShopmanagername(), s.getUrl(), s.getRegionnumber());
 
             if (id != -1) {
                 s.setShopID(id);
@@ -120,12 +120,14 @@ public class Model {
         return updated;
     }
 
-    /* REGIONS SECTION !!! */
+    //==========================================================================
+    // REGION SECTION
+    //==========================================================================
     // CODE TO CREATE A REGION
     public boolean addRegion(Region r) {
         boolean result = false;
         try {
-            int id = this.regionGateway.insertRegion(r.getRegionname(), r.getRegionalmanager(), r.getAddress(), r.getPhonenumber(), r.getEmail());
+            int id = this.regionGateway.insertRegion(r.getRegionname(), r.getRegionalmanager(), r.getPhonenumber(), r.getEmail());
 
             if (id != -1) {
                 r.setRegionnumber(id);
@@ -161,7 +163,7 @@ public class Model {
         return r;
     }
 
-    // CODE TO DELETE A SHOP
+    // CODE TO DELETE A REGION
     public boolean removeRegion(Region r) {
         boolean removed = false;
 
@@ -177,7 +179,7 @@ public class Model {
         return removed;
     }
 
-    // CODE TO UPDATE A SHOP
+    // CODE TO UPDATE A REGION
     boolean updateRegion(Region r) {
         boolean updated = false;
 

@@ -23,7 +23,6 @@ public class RegionTableGateway {
     private static final String COLUMN_REGIONNUMBER = "regionnumber";
     private static final String COLUMN_REGIONNAME = "regionname";
     private static final String COLUMN_REGIONALMANAGER = "regionalmanager";
-    private static final String COLUMN_ADDRESS = "address";
     private static final String COLUMN_PHONENUMBER = "phonenumber";
     private static final String COLUMN_EMAIL = "email";
 
@@ -31,7 +30,7 @@ public class RegionTableGateway {
         mConnection = connection;
     }
 
-    public int insertRegion(String rn, String rm, String a, String p, String e) throws SQLException {
+    public int insertRegion(String rn, String rm, String p, String e) throws SQLException {
 
         String query;
         PreparedStatement stmt;
@@ -41,18 +40,16 @@ public class RegionTableGateway {
         query = "INSERT INTO " + TABLE_NAME + " ("
                 + COLUMN_REGIONNAME + ", "
                 + COLUMN_REGIONALMANAGER + ", "
-                + COLUMN_ADDRESS + ", "
                 + COLUMN_PHONENUMBER + ", "
                 + COLUMN_EMAIL
-                + ") VALUES (?, ?, ?, ?, ?)";
+                + ") VALUES (?, ?, ?, ?)";
 
         stmt = mConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         /*stmt.setString(1, r);*/
-        stmt.setString(2,rn);
+        stmt.setString(2, rn);
         stmt.setString(3, rm);
-        stmt.setString(4, a);
-        stmt.setString(5, p);
-        stmt.setString(6, e);
+        stmt.setString(4, p);
+        stmt.setString(5, e);
         
         numRowsAffected = stmt.executeUpdate();
         
@@ -108,7 +105,7 @@ public class RegionTableGateway {
         List<Region> regions;
         
         int regionnumber;
-        String regionname, regionalmanager, address, phonenumber, email;
+        String regionname, regionalmanager, phonenumber, email;
         
         Region r;
         
@@ -125,12 +122,11 @@ public class RegionTableGateway {
             regionnumber = rs.getInt(COLUMN_REGIONNUMBER);
             regionname = rs.getString(COLUMN_REGIONNAME);
             regionalmanager = rs.getString(COLUMN_REGIONALMANAGER);
-            address = rs.getString(COLUMN_ADDRESS);
             phonenumber = rs.getString(COLUMN_PHONENUMBER);
             email = rs.getString(COLUMN_EMAIL);
             
             
-            r = new Region(regionnumber, regionname, regionalmanager, address, phonenumber, email);
+            r = new Region(regionnumber, regionname, regionalmanager, phonenumber, email);
             regions.add(r);
         }
         
@@ -150,19 +146,17 @@ public class RegionTableGateway {
         query = "UPDATE " + TABLE_NAME + " SET " +
                 COLUMN_REGIONNAME           + " = ?, " +
                 COLUMN_REGIONALMANAGER  + " = ?, " +
-                COLUMN_ADDRESS      + " = ?, " +
                 COLUMN_PHONENUMBER       + " = ?, " +
                 COLUMN_EMAIL              + " = ?, " +
                 " WHERE " + COLUMN_REGIONNUMBER + " = ?";
         
         // Create a PreparedStatement object to execute the query and insert the new value into the query
         stmt = mConnection.prepareStatement(query);
-        stmt.setInt(1, r.getRegionnumber());
+        /*stmt.setInt(1, r.getRegionnumber());*/
         stmt.setString(2, r.getRegionname());
         stmt.setString(3, r.getRegionalmanager());
-        stmt.setString(4, r.getAddress());
-        stmt.setString(5, r.getPhonenumber());
-        stmt.setString(6, r.getEmail());
+        stmt.setString(4, r.getPhonenumber());
+        stmt.setString(5, r.getEmail());
                 
         // Execute the query and make sure that one and only one row was inserted into the database
         numRowsAffected = stmt.executeUpdate();
@@ -170,12 +164,4 @@ public class RegionTableGateway {
         // Return true if one and only row was updated in the database
         return(numRowsAffected == 1);
     }
-
-
-
-
-
-
-
-
 }

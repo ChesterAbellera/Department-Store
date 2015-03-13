@@ -20,7 +20,7 @@ public class ShopTableGateway {
     private Connection mConnection;
     
     private static final String TABLE_NAME = "shops";
-    private static final String COLUMN_ADDRESS = "address";
+    private static final String COLUMN_SHOPADDRESS = "address";
     private static final String COLUMN_SHOPMANAGERNAME = "shopmanagername";
     private static final String COLUMN_PHONENUMBER = "phonenumber";
     private static final String COLUMN_DATEOPENED = "dateopened";
@@ -32,7 +32,7 @@ public class ShopTableGateway {
         mConnection = connection;
     }
     
-    public int insertShop(String a, String sm, String p, String d, String u, int r) throws SQLException {
+    public int insertShop(String sa, String sm, String p, String d, String u, int r) throws SQLException {
     
         String query;               // The SQL Query to execute
         PreparedStatement stmt;     // the java.sql.PreparedStatement object used to execute the SQL Query
@@ -41,7 +41,7 @@ public class ShopTableGateway {
         
         // The required SQL INSERT statement with place holders for the values to be inserted into the database
         query = "INSERT INTO " + TABLE_NAME + " (" +
-                COLUMN_ADDRESS + ", " +
+                COLUMN_SHOPADDRESS + ", " +
                 COLUMN_SHOPMANAGERNAME + ", " +
                 COLUMN_PHONENUMBER + ", " +
                 COLUMN_DATEOPENED + ", " +
@@ -51,7 +51,7 @@ public class ShopTableGateway {
         
         // Create a PreparedStatement object to execute the query and insert the values into the query
         stmt = mConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        stmt.setString(1, a);
+        stmt.setString(1, sa);
         stmt.setString(2, sm);
         stmt.setString(3, p);
         
@@ -130,7 +130,7 @@ public class ShopTableGateway {
         ResultSet rs;       // The java.sql.ResultSet representing the result of SQL query
         List<Shop> shops;   // The java.util.List containing the Shop objects created
 
-        String address, shopmanagername, phonenumber, dateopened, url;
+        String shopaddress, shopmanagername, phonenumber, dateopened, url;
         int shopID, regionnumber;
         
         Shop s;
@@ -152,7 +152,7 @@ public class ShopTableGateway {
         shops = new ArrayList<Shop>();
         while(rs.next())
         {
-            address = rs.getString(COLUMN_ADDRESS);
+            shopaddress = rs.getString(COLUMN_SHOPADDRESS);
             shopmanagername = rs.getString(COLUMN_SHOPMANAGERNAME);
             phonenumber = rs.getString(COLUMN_PHONENUMBER);
             Date date = rs.getDate(COLUMN_DATEOPENED);
@@ -164,7 +164,7 @@ public class ShopTableGateway {
                 regionnumber = -1;
             }
             
-            s = new Shop(address, shopmanagername, phonenumber, dateopened, url, shopID, regionnumber);
+            s = new Shop(shopaddress, shopmanagername, phonenumber, dateopened, url, shopID, regionnumber);
             shops.add(s);
         }
         
@@ -181,7 +181,7 @@ public class ShopTableGateway {
         
         // The required SQL INSERT statement qith place holders for the values to be inserted
         query = "UPDATE " + TABLE_NAME + " SET " +
-                COLUMN_ADDRESS          + " = ?, " +
+                COLUMN_SHOPADDRESS          + " = ?, " +
                 COLUMN_SHOPMANAGERNAME  + " = ?, " +
                 COLUMN_PHONENUMBER      + " = ?, " +
                 COLUMN_DATEOPENED       + " = ?, " +
@@ -191,7 +191,7 @@ public class ShopTableGateway {
         
         // Create a PreparedStatement object to execute the query and insert the new value into the query
         stmt = mConnection.prepareStatement(query);
-        stmt.setString(1, s.getAddress());
+        stmt.setString(1, s.getShopAddress());
         stmt.setString(2, s.getShopmanagername());
         stmt.setString(3, s.getPhonenumber());
         stmt.setString(5, s.getUrl());
