@@ -12,6 +12,10 @@ public class Region {
     public Region(int r, String rn, String rm, String p, String e) 
     {
         this.regionnumber = r;
+        this.regionname = rn;
+        this.regionalmanager = rm;
+        this.phonenumber = p;
+        this.email = e;
     }
 
     public Region(String rn, String rm, String p, String e)

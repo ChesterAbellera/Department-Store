@@ -317,10 +317,10 @@ public class MainApp {
         if (regions.isEmpty()) {
             System.out.println("Sorry, there were no regions found in the database.");
         } else {
-            System.out.printf("%-25s %-25s %-15s %-20s %-17s\n", "Region Number:", "Region Name:", "Region Manager Name:", "Phone Number:", "Region Email Address");
+            System.out.printf("%-25s %-35s %-25s %-25s %-35s\n", "Region Number:", "Region Name:", "Region Manager Name:", "Phone Number:", "Region Email Address");
             System.out.println();
             for (Region re : regions) {
-                System.out.printf("%-25d %-25s %-15s %-20s %-20s\n",
+                System.out.printf("%-25d %-35s %-25s %-25s %-35s\n",
                         re.getRegionnumber(),
                         re.getRegionname(),
                         re.getRegionalmanager(),
