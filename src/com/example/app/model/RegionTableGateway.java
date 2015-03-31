@@ -45,11 +45,10 @@ public class RegionTableGateway {
                 + ") VALUES (?, ?, ?, ?)";
 
         stmt = mConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        /*stmt.setString(1, r);*/
-        stmt.setString(2, rn);
-        stmt.setString(3, rm);
-        stmt.setString(4, p);
-        stmt.setString(5, e);
+        stmt.setString(1, rn);
+        stmt.setString(2, rm);
+        stmt.setString(3, p);
+        stmt.setString(4, e);
         
         numRowsAffected = stmt.executeUpdate();
         
@@ -147,17 +146,18 @@ public class RegionTableGateway {
                 COLUMN_REGIONNAME           + " = ?, " +
                 COLUMN_REGIONALMANAGER  + " = ?, " +
                 COLUMN_PHONENUMBER       + " = ?, " +
-                COLUMN_EMAIL              + " = ?, " +
+                COLUMN_EMAIL              + " = ? " +
                 " WHERE " + COLUMN_REGIONNUMBER + " = ?";
         
         // Create a PreparedStatement object to execute the query and insert the new value into the query
         stmt = mConnection.prepareStatement(query);
-        /*stmt.setInt(1, r.getRegionnumber());*/
-        stmt.setString(2, r.getRegionname());
-        stmt.setString(3, r.getRegionalmanager());
-        stmt.setString(4, r.getPhonenumber());
-        stmt.setString(5, r.getEmail());
-                
+        
+        stmt.setString(1, r.getRegionname());
+        stmt.setString(2, r.getRegionalmanager());
+        stmt.setString(3, r.getPhonenumber());
+        stmt.setString(4, r.getEmail());
+        stmt.setInt(5, r.getRegionnumber());
+
         // Execute the query and make sure that one and only one row was inserted into the database
         numRowsAffected = stmt.executeUpdate();
         
