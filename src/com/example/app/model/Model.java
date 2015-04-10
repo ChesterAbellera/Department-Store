@@ -44,8 +44,7 @@ public class Model {
     //==========================================================================
     // SHOP SECTION
     //==========================================================================
-    // CODE TO CREATE A SHOP
-    //--------------------------------------------------------------------------
+    
     public boolean addShop(Shop s) {
         boolean result = false;
         try {
@@ -62,11 +61,20 @@ public class Model {
         return result;
     }
 
-    //--------------------------------------------------------------------------
-    // CODE TO FIND A SHOP BY SHOPID
-    //--------------------------------------------------------------------------
     public List<Shop> getShops() {
         return this.shops;
+    }
+    
+    public List<Shop> getShopsByRegionnumber(int regionnumber) {
+        List<Shop> list = new ArrayList<Shop>();
+                for (Shop s : this.shops)
+                {
+                    if (s.getRegionnumber() == regionnumber)
+                    {
+                        list.add(s);
+                    }
+                }
+        return list;
     }
 
     Shop findShopByShopId(int shopID) {
@@ -87,9 +95,6 @@ public class Model {
         return s;
     }
 
-    //--------------------------------------------------------------------------
-    // CODE TO DELETE A SHOP
-    //--------------------------------------------------------------------------
     public boolean removeShop(Shop s) {
         boolean removed = false;
 
@@ -105,9 +110,6 @@ public class Model {
         return removed;
     }
 
-    //--------------------------------------------------------------------------
-    // CODE TO UPDATE A SHOP
-    //--------------------------------------------------------------------------
     boolean updateShop(Shop s) {
         boolean updated = false;
 
@@ -123,7 +125,7 @@ public class Model {
     //==========================================================================
     // REGION SECTION
     //==========================================================================
-    // CODE TO CREATE A REGION
+
     public boolean addRegion(Region r) {
         boolean result = false;
         try {
@@ -140,7 +142,6 @@ public class Model {
         return result;
     }
 
-    // CODE TO FIND A REGION BY REGIONNUMBER
     public List<Region> getRegions() {
         return this.regions;
     }
@@ -163,7 +164,6 @@ public class Model {
         return r;
     }
 
-    // CODE TO DELETE A REGION
     public boolean removeRegion(Region r) {
         boolean removed = false;
 
@@ -179,7 +179,6 @@ public class Model {
         return removed;
     }
 
-    // CODE TO UPDATE A REGION
     boolean updateRegion(Region r) {
         boolean updated = false;
 

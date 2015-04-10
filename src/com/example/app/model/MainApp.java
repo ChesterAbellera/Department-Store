@@ -3,43 +3,87 @@ package com.example.app.model;
 import java.util.List;
 import java.util.Scanner;
 
-// This GIT stuff works, woohooooo!
 public class MainApp {
 
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
         Model model = Model.getInstance();
-
-        int option;
+        String option = null;
         System.out.println("Greetings, User! =D");
+        System.out.println();
         System.out.println("What would you like to do ?");
         System.out.println("___________________________");
         System.out.println("Just to name a few of your options,");
         System.out.println("you can : ");
         System.out.println();
+        try {
+            do {
+                System.out.println();
+                System.out.println("1. Access Shops Table.");
+                System.out.println("2. Access Regions Table.");
+                System.out.println("3. Exit App.");
+                System.out.println();
+                option = keyboard.nextLine();
+                if (option.equals("Shop") || option.equals("shop") || option.equals("s") || option.equals("1")) {
+                    doShopMenu(keyboard, model);
+
+                } else if (option.equals("Region") || option.equals("region") || option.equals("r") || option.equals("2")) {
+                    doRegionMenu(keyboard, model);
+                }
+            } while (!(option.equals("Exit") || option.equals("exit") || option.equals("e") || option.equals("3")));
+            System.out.println();
+            System.out.println("Goodbye! =)");
+            System.out.println();
+        } catch (NumberFormatException e) {
+            System.out.println();
+            System.out.println("*** Number format exception: " + e.getMessage() + " ***");
+            System.out.println();
+        }
+        System.out.println();
         System.out.println();
 
+    }
+
+    // GetInt Method:
+    private static int getInt(Scanner keyboard, String prompt) {
+        int opt = 0;
+        boolean finished = false;
+
         do {
+            try {
+                System.out.println(prompt);
+                String line = keyboard.nextLine();
+                opt = Integer.parseInt(line);
+                finished = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Exception: " + e.getMessage());
+            }
+        } while (!finished);
+        return opt;
+    }
+
+    private static void doShopMenu(Scanner keyboard, Model model) {
+        int opt;
+
+        do {
+            System.out.println();
+            System.out.println();
+            System.out.println("Shop Table Options :");
+            System.out.println("____________________");
+            System.out.println();
             System.out.println("1. Create a new Shop");
             System.out.println("2. Delete an existing Shop");
             System.out.println("3. Edit existing Shop(s)");
             System.out.println("4. View all existing Shops");
-            System.out.println();
-            System.out.println("5. Create a new Region");
-            System.out.println("6. Delete an existing Region");
-            System.out.println("7. Edit existing Region(s)");
-            System.out.println("8. View all existing Regions");
-            System.out.println();
-            System.out.println("9. Exit");
+            System.out.println("5. View a single Shop");
+            System.out.println("6. Return.");
             System.out.println();
 
-            System.out.print("Enter option: ");
-            String line = keyboard.nextLine();
-            option = Integer.parseInt(line);
+            opt = getInt(keyboard, "Enter option: ");
 
-            System.out.println("You chose option : " + option);
+            System.out.println("You chose option : " + opt);
             System.out.println();
-            switch (option) {
+            switch (opt) {
                 case 1: {
                     System.out.println("--- Creating Shop ---");
                     System.out.println("_____________");
@@ -71,6 +115,39 @@ public class MainApp {
                     break;
                 }
                 case 5: {
+                    System.out.println("--- Viewing Shop ---");
+                    System.out.println("_________________");
+                    System.out.println();
+                    viewShop(keyboard, model);
+                    break;
+                }
+            }
+        } while (opt != 6);
+    }
+
+    private static void doRegionMenu(Scanner keyboard, Model model) {
+        int opt;
+
+        do {
+            System.out.println();
+            System.out.println();
+            System.out.println("Region Table Options :");
+            System.out.println("____________________");
+            System.out.println();
+            System.out.println("1. Create a new Region");
+            System.out.println("2. Delete an existing Region");
+            System.out.println("3. Edit existing Region(s)");
+            System.out.println("4. View all existing Region");
+            System.out.println("5. View a single Region");
+            System.out.println("6. Return.");
+            System.out.println();
+
+            opt = getInt(keyboard, "Enter option: ");
+
+            System.out.println("You chose option : " + opt);
+            System.out.println();
+            switch (opt) {
+                case 1: {
                     System.out.println("--- Creating Region ---");
                     System.out.println("_____________");
                     System.out.println();
@@ -78,7 +155,7 @@ public class MainApp {
 
                     break;
                 }
-                case 6: {
+                case 2: {
                     System.out.println("--- Deleting Region ---");
                     System.out.println("_____________");
                     System.out.println();
@@ -86,23 +163,29 @@ public class MainApp {
 
                     break;
                 }
-                case 7: {
+                case 3: {
                     System.out.println("--- Editing Region ---");
                     System.out.println("_______________");
                     System.out.println();
                     editRegion(keyboard, model);
                     break;
                 }
-                case 8: {
+                case 4: {
                     System.out.println("--- Viewing all Regions ---");
                     System.out.println("_________________");
                     System.out.println();
                     viewRegions(model);
                     break;
                 }
+                case 5: {
+                    System.out.println("--- Viewing Region ---");
+                    System.out.println("_________________");
+                    System.out.println();
+                    viewRegion(keyboard, model);
+                    break;
+                }
             }
-        } while (option != 9);
-        System.out.println("Goodbye! =)");
+        } while (opt != 6);
     }
 
     /* --------------------------------------------------------------------- */
@@ -179,23 +262,40 @@ public class MainApp {
         if (shops.isEmpty()) {
             System.out.println("*** Sorry, there were no shops found in the database. ***");
         } else {
-            System.out.printf("%-50s %-25s %-15s %-20s %-35s %-15s %-15s\n", "Shop Address:", "Shop Manager Name:", "Phone Number:", "Date Opened:", "Url:", "Shop ID:", "Region Number:");
-            System.out.println();
-            for (Shop sh : shops) {
-                System.out.printf("%-50s %-25s %-15s %-20s %-35s %-15d %-15d\n",
-                        sh.getShopAddress(),
-                        sh.getShopmanagername(),
-                        sh.getPhonenumber(),
-                        sh.getDateopened(),
-                        sh.getUrl(),
-                        sh.getShopID(),
-                        sh.getRegionnumber()
-                );
-            }
-            System.out.println();
-            System.out.println();
-            System.out.println();
+            displayShops(shops, mdl);
+        }
+    }
 
+    private static void viewShop(Scanner keyboard, Model model) {
+
+        try {
+            System.out.println("Enter the ID of the Shop that you wish to view :");
+            int shopID = Integer.parseInt(keyboard.nextLine());
+            System.out.println();
+            Shop s;
+
+            s = model.findShopByShopId(shopID);
+            if (s != null) {
+                Region r = model.findRegionByRegionNumber(s.getRegionnumber());
+
+                System.out.println("Shop ID           : " + s.getShopID());
+                System.out.println("Shop Address      : " + s.getShopAddress());
+                System.out.println("Shop Manager Name : " + s.getShopmanagername());
+                System.out.println("Shop Phone Number : " + s.getPhonenumber());
+                System.out.println("Shop Opening Date : " + s.getDateopened());
+                System.out.println("Shop URL Address  : " + s.getUrl());
+                System.out.println("Region Manager    : " + ((r != null) ? r.getRegionalmanager() : ""));
+                System.out.println("____________________________________________");
+                System.out.println();
+
+            } else {
+                System.out.println("*** Sorry, there were no shops found with that specific ID ***");
+                System.out.println();
+            }
+        } catch (NumberFormatException e) {
+            System.out.println();
+            System.out.println("*** Number format exception: " + e.getMessage() + " ***");
+            System.out.println();
         }
     }
 
@@ -345,6 +445,66 @@ public class MainApp {
             System.out.println();
 
         }
+    }
+
+    private static void viewRegion(Scanner keyboard, Model model) {
+
+        try {
+            System.out.println("Enter the ID of the Region that you wish to view :");
+            int regionnumber = Integer.parseInt(keyboard.nextLine());
+            System.out.println();
+            Region r;
+
+            r = model.findRegionByRegionNumber(regionnumber);
+            if (r != null) {
+                System.out.println("Region Number        : " + r.getRegionnumber());
+                System.out.println("Region Name          : " + r.getRegionname());
+                System.out.println("Region Manager       : " + r.getRegionalmanager());
+                System.out.println("Region Phone Number  : " + r.getPhonenumber());
+                System.out.println("Region Email Address : " + r.getEmail());
+                System.out.println("____________________________________________");
+
+                List<Shop> shopList = model.getShopsByRegionnumber(r.getRegionnumber());
+                if (shopList.isEmpty()) {
+                    System.out.println();
+                    System.out.println("This Region is not associated with any shops.");
+                    System.out.println();
+                } else {
+                    System.out.println();
+                    System.out.println("This Region is associated with the following shop(s) :");
+                    System.out.println();
+                    displayShops(shopList, model);
+                }
+                System.out.println();
+
+            } else {
+                System.out.println("*** Sorry, there were no regions found with that specific ID ***");
+                System.out.println();
+            }
+        } catch (NumberFormatException e) {
+            System.out.println();
+            System.out.println("*** Number format exception: " + e.getMessage() + " ***");
+            System.out.println();
+        }
+    }
+
+    private static void displayShops(List<Shop> shops, Model mdl) {
+        System.out.printf("%-15s %-50s %-25s %-15s %-20s %-35s %-20s\n", "Shop ID:", "Shop Address:", "Shop Manager Name:", "Phone Number:", "Date Opened:", "Url:", "Region Manager:");
+        System.out.println();
+        for (Shop sh : shops) {
+            Region r = mdl.findRegionByRegionNumber(sh.getRegionnumber());
+            System.out.printf("%-15d %-50s %-25s %-15s %-20s %-35s %-20s\n",
+                    sh.getShopID(),
+                    sh.getShopAddress(),
+                    sh.getShopmanagername(),
+                    sh.getPhonenumber(),
+                    sh.getDateopened(),
+                    sh.getUrl(),
+                    
+                    (r != null) ? r.getRegionalmanager() : "");
+        }
+        System.out.println();
+        System.out.println();
     }
 
     private static Region readRegion(Scanner keyb) {
